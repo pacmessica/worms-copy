@@ -3,6 +3,7 @@ import GameModel from './models/GameModel';
 import NewPlayerComponent from './components/NewPlayerComponent';
 import NewGameComponent from './components/NewGameComponent';
 import GameListComponent from './components/GameListComponent';
+import Car from './components/Car';
 
 class App extends React.Component {
   constructor() {
@@ -98,6 +99,7 @@ class App extends React.Component {
           <div className="game">
           <p>Player one: {this.state.currentGame.playerOne}</p>
           <p>Player two: {this.state.currentGame.playerTwo}</p>
+          <Car />
         </div>}
       </div>
     );
