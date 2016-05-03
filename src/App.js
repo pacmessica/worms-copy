@@ -33,7 +33,7 @@ class App extends React.Component {
     });
   }
 
-  createGame() {
+  createGame( newPlayer ) {
     this.games.addResource({
       playerOne: newPlayer
     });
@@ -44,7 +44,7 @@ class App extends React.Component {
     return (
       <div style={containerStyles}>
         <h1 style={headerStyle}>Games Menu</h1>
-        <NewGameComponent games={this.state.games}/>
+        <NewGameComponent onCreate={this.createGame.bind(this)}/>
         <GameListComponent games={this.state.games}/>
       </div>
     );
