@@ -4,6 +4,7 @@ import NewPlayerComponent from './components/NewPlayerComponent';
 import NewGameComponent from './components/NewGameComponent';
 import GameListComponent from './components/GameListComponent';
 import WormComponent from './components/WormComponent';
+import WormControls from './components/WormControls';
 
 class App extends React.Component {
   constructor() {
@@ -15,7 +16,8 @@ class App extends React.Component {
     this.state = {
       games: [],
       currentGame: null,
-      currentPlayer: null
+      currentPlayer: null,
+      currentPosition: 100
     };
   }
 
@@ -41,6 +43,7 @@ class App extends React.Component {
       currentPlayer: player
     });
   }
+
 
   createGame() {
     this.games.addResource({
@@ -78,8 +81,16 @@ class App extends React.Component {
     };
   }
 
+  moveWorm(positionDifference) {
+    var newPosition = this.state.currentPosition + positionDifference
+    this.setState({
+      currentPosition: newPosition
+    });
+  }
+
   render() {
     console.log(this.state);
+
     return (
       <div style={this.containerStyles()}>
         <h1 style={this.headerStyle()}>Rock Paper Scissors</h1>
@@ -99,7 +110,8 @@ class App extends React.Component {
           <div className="game">
           <p>Player one: {this.state.currentGame.playerOne}</p>
           <p>Player two: {this.state.currentGame.playerTwo}</p>
-          <WormComponent />
+          <WormComponent x={this.state.currentPosition} />
+          <WormControls onMove={this.moveWorm.bind(this)}/>
         </div>}
       </div>
     );

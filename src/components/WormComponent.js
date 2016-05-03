@@ -3,45 +3,23 @@ import React from 'react';
 class WormComponent extends React.Component {
   constructor() {
     super();
+  }
 
-    this.state = {
-      x: 100,
-      y: 500
+  wormStyle() {
+    return {
+      position: "fixed",
+      width: "10px",
+      height: "10px",
+      backgroundColor: "red",
+      left: this.props.x + "px",
+      top: "500px"
     };
   }
 
-
-
- goRight() {
-   this.setState ({
-     x: this.state.x + 10
-   });
-  }
-
-  goLeft() {
-    this.setState ({
-      x: this.state.x - 10
-    });
-   }
-
-  createElement(){
-    this.element = document.createElement('div');
-    this.element.style.position = "fixed";
-    this.element.style.left = this.state.x + "px";
-    this.element.style.top = this.state.y + "px";
-    this.element.style.width = "10px";
-    this.element.style.height = "10px";
-    this.element.style.backgroundColor = "red";
-    document.body.appendChild(this.element);
-  }
-
   render() {
+    console.log(this.props.x)
     return (
-      <div>
-        <p>Hello World</p>
-        <button onClick={this.createElement.bind(this)}>Create Worm!</button>
-        <button onClick={this.goRight.bind(this)}>Right!</button>
-        <button onClick={this.goLeft.bind(this)}>Left!</button>
+      <div style={this.wormStyle()}>
       </div>
     );
   }
