@@ -3,18 +3,6 @@ import GameModel from './models/GameModel';
 import NewGameComponent from './components/NewGameComponent';
 import GameListComponent from './components/GameListComponent';
 
-
-
-const headerStyle = {
-  textAlign: "center"
-};
-
-const containerStyles = {
-  width: "500px",
-  height: "500px",
-  margin: "auto",
-};
-
 class App extends React.Component {
   constructor() {
     super();
@@ -24,6 +12,7 @@ class App extends React.Component {
 
     this.state = {
       games: [],
+      currentGame: null
     };
   }
 
@@ -33,19 +22,39 @@ class App extends React.Component {
     });
   }
 
-  createGame( newPlayer ) {
+  createGame(newPlayer) {
     this.games.addResource({
       playerOne: newPlayer
+    });
+  }
+
+  containerStyles() {
+    return {
+      width: "500px",
+      height: "500px",
+      margin: "auto",
+    };
+  }
+
+  headerStyle() {
+    return {
+      textAlign: "center"
+    };
+  }
+
+  selectGame(game) {
+    this.setState({
+      currentGame: game
     });
   }
 
   render() {
     console.log(this.state);
     return (
-      <div style={containerStyles}>
-        <h1 style={headerStyle}>Games Menu</h1>
+      <div style={this.containerStyles()}>
+        <h1 style={this.headerStyle()}>Rock Paper Scissors</h1>
         <NewGameComponent onCreate={this.createGame.bind(this)}/>
-        <GameListComponent games={this.state.games}/>
+        <GameListComponent games={this.state.games} onSelect={this.selectGame.bind(this)}/>
       </div>
     );
   }
