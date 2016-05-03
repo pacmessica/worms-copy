@@ -12,7 +12,8 @@ class App extends React.Component {
 
     this.state = {
       games: [],
-      currentGame: null
+      currentGame: null,
+      currentPlayer: null
     };
   }
 
@@ -25,6 +26,13 @@ class App extends React.Component {
   createGame(newPlayer) {
     this.games.addResource({
       playerOne: newPlayer
+    });
+    this.setPlayer(newPlayer);
+  }
+
+  setPlayer(player) {
+    this.setState({
+      currentPlayer: player
     });
   }
 
@@ -53,8 +61,21 @@ class App extends React.Component {
     return (
       <div style={this.containerStyles()}>
         <h1 style={this.headerStyle()}>Rock Paper Scissors</h1>
-        <NewGameComponent onCreate={this.createGame.bind(this)}/>
-        <GameListComponent games={this.state.games} onSelect={this.selectGame.bind(this)}/>
+
+        { this.state.currentGame === null &&
+          <NewGameComponent onCreate={this.createGame.bind(this)}/> }
+
+        { this.state.currentGame === null &&
+          <GameListComponent games={this.state.games} onSelect={this.selectGame.bind(this)}/> }
+
+        { this.state.currentGame !== null &&
+          <div className="game">
+          <p>Player one: {this.state.currentGame.playerOne}</p>
+          <p>Player two: {this.state.currentGame.playerTwo}</p>
+        </div>}
+
+        { this.state.currentPlayer !== null &&
+          <p>Hi, {this.state.currentPlayer}</p> }
       </div>
     );
   }
