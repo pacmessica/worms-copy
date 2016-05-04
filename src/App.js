@@ -100,7 +100,7 @@ class App extends React.Component {
       laserPosition: Position,
       laserActivated: true
     });
-
+    
     if (this.state.laserPosition > 500) {
       this.setState({
         laserActivated: false
