@@ -193,9 +193,10 @@ class App extends React.Component {
 
         { this.state.currentGame !== null &&
           <div className="game">
+
             <p>Player one: {this.state.currentGame.playerOne}</p>
             <p>Player two: {this.state.currentGame.playerTwo}</p>
-            <WormComponent x={this.state.currentPosition.playerOnePosition} />
+            <WormComponent x={this.state.currentGame.playerOnePosition} />
             <WormComponent x={this.state.currentGame.playerTwoPosition} />
             <RayGunComponent x={this.state.currentPosition} />
             {this.renderLaser()}
