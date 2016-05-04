@@ -151,6 +151,15 @@ class App extends React.Component {
       });
     }
 
+    if (this.state.laserPosition === this.state.currentGame.playerTwoPosition) {
+      window.alert("KAPOW");
+      this.setState({
+        laserActivated: false,
+        laserPosition: null
+      });
+    }
+
+
     if ( this.state.laserActivated ) {
       var newPosition = Position + 10;
       setTimeout(function(){this.shootRayGun(newPosition)}.bind(this),40);
