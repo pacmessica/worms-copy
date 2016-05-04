@@ -123,6 +123,15 @@ class App extends React.Component {
 
   moveWorm(positionDifference) {
     var newPosition = this.state.currentPosition + positionDifference
+
+    if (this.state.currentGame.playerOne == this.state.currentPlayer) {
+      this.games.save(this.state.currentGame, { playerOnePosition: newPosition });
+    }
+
+    if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
+      this.games.save(this.state.currentGame, { playerTwoPosition: newPosition });
+    }
+
     this.setState({
       currentPosition: newPosition
     });
@@ -157,11 +166,10 @@ class App extends React.Component {
 
 
   render() {
-    console.log(this.state);
 
     return (
       <div style={this.containerStyles()}>
-        <h1 style={this.headerStyle()}>Rock Paper Scissors</h1>
+        <h1 style={this.headerStyle()}>~*LASER WORMZ*~</h1>
         { this.state.currentPlayer !== null &&
           <p>Hi, {this.state.currentPlayer}</p> }
 
@@ -176,13 +184,12 @@ class App extends React.Component {
 
         { this.state.currentGame !== null &&
           <div className="game">
-          <p>Player one: {this.state.currentGame.playerOne}</p>
-          <p>Player two: {this.state.currentGame.playerTwo}</p>
-          <WormComponent x={this.state.currentPosition} />
-
-          <RayGunComponent x={this.state.currentPosition} />
-          {this.renderLaser()}
-
+            <p>Player one: {this.state.currentGame.playerOne}</p>
+            <p>Player two: {this.state.currentGame.playerTwo}</p>
+            <WormComponent x={this.state.currentPosition.playerOnePosition} />
+            <WormComponent x={this.state.currentGame.playerTwoPosition} />
+            <RayGunComponent x={this.state.currentPosition} />
+            {this.renderLaser()}
         </div>}
       </div>
     );
