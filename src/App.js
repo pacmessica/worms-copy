@@ -93,15 +93,27 @@ class App extends React.Component {
     });
   }
 
-  shootRayGun(startingPosition) {
+
+  shootRayGun(Position) {
     console.log("raygun activated");
     this.setState({
-      laserPosition: startingPosition,
+      laserPosition: Position,
       laserActivated: true
     });
+
+    if (this.state.laserPosition > 500) {
+      this.setState({
+        laserActivated: false
+      });
+    }
+
+    if ( this.state.laserActivated ) {
+      var newPosition = Position + 10;
+      setTimeout(function(){this.shootRayGun(newPosition)}.bind(this),40);
+    }
   }
 
-  renderRayGun() {
+  renderLaser() {
     if(this.state.laserActivated){
       return <LaserComponent x={this.state.laserPosition}/>
     }
@@ -133,7 +145,7 @@ class App extends React.Component {
           <WormControls onMove={this.moveWorm.bind(this)}/>
           <RayGunComponent x={this.state.currentPosition} />
           <RayGunControls x={this.state.currentPosition} onShoot={this.shootRayGun.bind(this)}/>
-          {this.renderRayGun()}
+          {this.renderLaser()}
         </div>}
       </div>
     );
