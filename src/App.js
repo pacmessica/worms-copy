@@ -5,6 +5,9 @@ import NewGameComponent from './components/NewGameComponent';
 import GameListComponent from './components/GameListComponent';
 import WormComponent from './components/WormComponent';
 import WormControls from './components/WormControls';
+import RayGunComponent from './components/RayGunComponent';
+import RayGunControls from './components/RayGunControls';
+import LaserComponent from './components/LaserComponent';
 
 class App extends React.Component {
   constructor() {
@@ -17,7 +20,9 @@ class App extends React.Component {
       games: [],
       currentGame: null,
       currentPlayer: null,
-      currentPosition: 100
+      currentPosition: 100,
+      laserPosition: null,
+      laserActivated: false
     };
   }
 
@@ -88,6 +93,32 @@ class App extends React.Component {
     });
   }
 
+
+  shootRayGun(Position) {
+    console.log("raygun activated");
+    this.setState({
+      laserPosition: Position,
+      laserActivated: true
+    });
+
+    if (this.state.laserPosition > 500) {
+      this.setState({
+        laserActivated: false
+      });
+    }
+
+    if ( this.state.laserActivated ) {
+      var newPosition = Position + 10;
+      setTimeout(function(){this.shootRayGun(newPosition)}.bind(this),40);
+    }
+  }
+
+  renderLaser() {
+    if(this.state.laserActivated){
+      return <LaserComponent x={this.state.laserPosition}/>
+    }
+  }
+
   render() {
     console.log(this.state);
 
@@ -112,6 +143,9 @@ class App extends React.Component {
           <p>Player two: {this.state.currentGame.playerTwo}</p>
           <WormComponent x={this.state.currentPosition} />
           <WormControls onMove={this.moveWorm.bind(this)}/>
+          <RayGunComponent x={this.state.currentPosition} />
+          <RayGunControls x={this.state.currentPosition} onShoot={this.shootRayGun.bind(this)}/>
+          {this.renderLaser()}
         </div>}
       </div>
     );
