@@ -24,7 +24,34 @@ class App extends React.Component {
       laserPosition: null,
       laserActivated: false
     };
+
+
+    let app = this;
+   document.addEventListener("keydown", function(event) {
+    let keyCode = event.keyCode;
+      if(keyCode===37) {
+        app.onLeftArrowKeypress();
+      }
+      else if(keyCode===39){
+        app.onRightArrowKeypress();
+      }
+    }, false);
+
   }
+
+  onRightArrowKeypress() {
+    console.log(" hello")
+    this.moveWorm(10);
+
+  }
+
+  onLeftArrowKeypress() {
+    console.log(" yes")
+    this.moveWorm(-10);
+
+  }
+
+
 
   updateList() {
     this.setState({
@@ -100,7 +127,7 @@ class App extends React.Component {
       laserPosition: Position,
       laserActivated: true
     });
-    
+
     if (this.state.laserPosition > 500) {
       this.setState({
         laserActivated: false
@@ -118,6 +145,8 @@ class App extends React.Component {
       return <LaserComponent x={this.state.laserPosition}/>
     }
   }
+
+
 
   render() {
     console.log(this.state);

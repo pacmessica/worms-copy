@@ -9,6 +9,10 @@ class WormControls extends React.Component {
     this.props.onMove(-10);
   }
 
+  arrowPress() {
+    this.props.onMove(this.props.difference);
+  }
+
   render() {
     return (
       <div>
