@@ -1,4 +1,5 @@
 import React from 'react';
+import FlatButton from 'material-ui/lib/flat-button';
 
 class GameListItemComponent extends React.Component {
   selectGame() {
@@ -7,7 +8,10 @@ class GameListItemComponent extends React.Component {
 
   render() {
     return (
-      <li onClick={this.selectGame.bind(this)}>Game by {this.props.game.playerOne}</li>
+      <li>
+        <FlatButton onClick={this.selectGame.bind(this)} label="Join" primary={true}/>
+        Game by {this.props.game.playerOne}
+      </li>
     );
   }
 }

@@ -4,10 +4,24 @@ import NewPlayerComponent from './components/NewPlayerComponent';
 import NewGameComponent from './components/NewGameComponent';
 import GameListComponent from './components/GameListComponent';
 import WormComponent from './components/WormComponent';
-
 import RayGunComponent from './components/RayGunComponent';
-
 import LaserComponent from './components/LaserComponent';
+import AppBar from 'material-ui/lib/app-bar';
+import RaisedButton from 'material-ui/lib/raised-button';
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
+import Theme from './lib/Theme';
+
+const containerStyles = {
+  width: "500px",
+  height: "500px",
+  margin: "auto"
+}
+
+const headerStyle = {
+  textAlign: "center",
+  fontFamily: "Roboto"
+}
+
 
 class App extends React.Component {
   constructor() {
@@ -119,20 +133,6 @@ class App extends React.Component {
     }
   }
 
-  containerStyles() {
-    return {
-      width: "500px",
-      height: "500px",
-      margin: "auto",
-    };
-  }
-
-  headerStyle() {
-    return {
-      textAlign: "center"
-    };
-  }
-
   moveWorm(positionDifference) {
     var newPosition = this.state.currentPosition + positionDifference
 
@@ -232,8 +232,10 @@ else  if (this.state.currentGame.playerTwo === this.state.currentPlayer) {
   render() {
 
     return (
-      <div style={this.containerStyles()}>
-        <h1 style={this.headerStyle()}>~*LASER WORMZ*~</h1>
+
+      <div>
+        <AppBar title="LAzer WoRmz" titleStyle={{ textAlign: 'center' }}/>
+        <div style={containerStyles}>
         { this.state.currentPlayer !== null &&
           <p>Hi, {this.state.currentPlayer}</p> }
 
@@ -260,6 +262,7 @@ else  if (this.state.currentGame.playerTwo === this.state.currentPlayer) {
             {this.renderLaser()}
         </div>}
       </div>
+    </div>  
     );
   }
 }

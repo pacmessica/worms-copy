@@ -1,4 +1,5 @@
 import React from 'react';
+import RaisedButton from 'material-ui/lib/raised-button';
 
 class NewGameComponent extends React.Component {
   createGame(event) {
