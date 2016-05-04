@@ -4,9 +4,9 @@ import NewPlayerComponent from './components/NewPlayerComponent';
 import NewGameComponent from './components/NewGameComponent';
 import GameListComponent from './components/GameListComponent';
 import WormComponent from './components/WormComponent';
-import WormControls from './components/WormControls';
+
 import RayGunComponent from './components/RayGunComponent';
-import RayGunControls from './components/RayGunControls';
+
 import LaserComponent from './components/LaserComponent';
 
 class App extends React.Component {
@@ -35,6 +35,9 @@ class App extends React.Component {
       else if(keyCode===39){
         app.onRightArrowKeypress();
       }
+      else if(keyCode===32){
+        app.onEnterKeypress();
+      }
     }, false);
 
   }
@@ -49,6 +52,11 @@ class App extends React.Component {
     console.log(" yes")
     this.moveWorm(-10);
 
+  }
+
+  onEnterKeypress(){
+    console.log(" shoot her")
+    this.shootRayGun(this.state.currentPosition);
   }
 
 
@@ -171,10 +179,10 @@ class App extends React.Component {
           <p>Player one: {this.state.currentGame.playerOne}</p>
           <p>Player two: {this.state.currentGame.playerTwo}</p>
           <WormComponent x={this.state.currentPosition} />
-          <WormControls onMove={this.moveWorm.bind(this)}/>
+
           <RayGunComponent x={this.state.currentPosition} />
-          <RayGunControls x={this.state.currentPosition} onShoot={this.shootRayGun.bind(this)}/>
           {this.renderLaser()}
+
         </div>}
       </div>
     );
