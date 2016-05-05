@@ -35,9 +35,11 @@ class App extends React.Component {
       currentGame: null,
       currentPlayer: null,
       currentXPosition: 100,
-      laserPosition: null,
+      currentYPosition: 500,
+      laserXPosition: null,
+      laserYPosition: null,
       laserActivated: false,
-      currentYPosition: 500
+
     };
 
     let app = this;
@@ -70,7 +72,7 @@ class App extends React.Component {
   }
 
   onSpaceKeypress(){
-    this.shootRayGun(this.state.currentXPosition);
+    this.shootRayGun(this.state.currentXPosition, this.state.currentYPosition);
   }
 
   onUpArrowKeypress(){
@@ -158,56 +160,63 @@ class App extends React.Component {
 
   }
 
-  shootRayGun(Position) {
+  shootRayGun(x, y) {
     this.setState({
-      laserPosition: Position,
+      laserXPosition: x,
+      laserYPosition: y,
       laserActivated: true
     });
 
-    if (this.state.laserPosition > 800 || this.state.laserPosition < 0 ) {
+    if (this.state.laserXPosition > 800 || this.state.laserXPosition < 0 ) {
       this.setState({
         laserActivated: false
       });
     }
 
     if (this.state.currentGame.playerOne == this.state.currentPlayer) {
-      if (this.state.laserPosition == this.state.currentGame.playerTwoXPosition ) {
+      if (this.state.laserXPosition == this.state.currentGame.playerTwoXPosition &&
+          this.state.laserYPosition == this.state.currentGame.playerTwoYPosition
+      ) {
         window.alert("KAPOW, "  + this.state.currentGame.playerTwo + " loses");
         this.setState({
           laserActivated: false,
-          laserPosition: null
+          laserXPosition: null,
+          laserYPosition: null
         });
       }
     }
 
     else if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
-      if (this.state.laserPosition === this.state.currentGame.playerOneXPosition ) {
+      if (this.state.laserXPosition === this.state.currentGame.playerOneXPosition &&
+          this.state.laserYPosition === this.state.currentGame.playerOneYPosition
+      ) {
         window.alert("KAPOW," + this.state.currentGame.playerOne + " loses");
         this.setState({
           laserActivated: false,
-          laserPosition: null
+          laserXPosition: null,
+          laserYPosition: null
         });
       }
     }
 
     if (this.state.currentGame.playerOne == this.state.currentPlayer) {
       if ( this.state.laserActivated  ) {
-        var newPosition = Position + 10;
-        setTimeout(function(){this.shootRayGun(newPosition)}.bind(this),40);
+        var newXPosition = x + 10;
+        setTimeout(function(){this.shootRayGun(newXPosition, y)}.bind(this),40);
       }
     }
 
     else  if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
       if ( this.state.laserActivated  ) {
-        var newPosition = Position - 10;
-        setTimeout(function(){this.shootRayGun(newPosition)}.bind(this),40);
+        var newXPosition = x - 10;
+        setTimeout(function(){this.shootRayGun(newXPosition, y)}.bind(this),40);
       }
     }
   }
 
   renderLaser() {
     if(this.state.laserActivated){
-      return <LaserComponent x={this.state.laserPosition}/>
+      return <LaserComponent x={this.state.laserXPosition} y={this.state.laserYPosition}/>
     }
   }
 
