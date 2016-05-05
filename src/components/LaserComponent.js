@@ -12,7 +12,7 @@ class LaserComponent extends React.Component {
       height: "5px",
       backgroundColor: "green",
       // left: `calc(${this.props.x}vmin + 50vw - 50vmin)`,
-      left: this.props.x + 10 + "px",
+      left: this.props.x + 5 + "px",
       top: "500px"
     };
   }

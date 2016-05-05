@@ -22,7 +22,9 @@ class App extends React.Component {
       currentPlayer: null,
       currentPosition: 100,
       laserPosition: null,
-      laserActivated: false
+      laserActivated: false,
+      currentyPosition: 500
+
     };
 
 
@@ -37,6 +39,10 @@ class App extends React.Component {
       }
       else if(keyCode===32){
         app.onEnterKeypress();
+      }
+
+      else if(keyCode===17){
+        app.onCtrlKeypress();
       }
     }, false);
 
@@ -57,6 +63,12 @@ class App extends React.Component {
   onEnterKeypress(){
     console.log(" shoot her")
     this.shootRayGun(this.state.currentPosition);
+  }
+
+  onCtrlKeypress(){
+
+    setTimeout(function(){this.jumpWorm(-20)}.bind(this),40)
+    console.log("cool " + this.state.currentyPosition);
   }
 
 
@@ -103,7 +115,7 @@ class App extends React.Component {
         currentGame: game
       });
     } else {
-      window.alert("Can't touch this dung dung dung dung");
+      window.alert("Cannot join game, it is full");
     }
   }
 
@@ -127,7 +139,6 @@ class App extends React.Component {
     if (this.state.currentGame.playerOne == this.state.currentPlayer) {
       this.games.save(this.state.currentGame, { playerOnePosition: newPosition });
     }
-
     if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
       this.games.save(this.state.currentGame, { playerTwoPosition: newPosition });
     }
@@ -137,6 +148,28 @@ class App extends React.Component {
     });
   }
 
+  jumpWorm(positionDifference) {
+    var oldPosition=this.state.currentyPosition
+    var newPosition = this.state.currentyPosition + positionDifference
+
+    if (this.state.currentGame.playerOne == this.state.currentPlayer) {
+      this.games.save(this.state.currentGame, { playerOneyPosition: newPosition });
+    }
+    if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
+      this.games.save(this.state.currentGame, { playerTwoyPosition: newPosition });
+    }
+
+    this.setState({
+      currentyPosition: newPosition
+    });
+
+  }
+
+
+
+
+
+
 
   shootRayGun(Position) {
     console.log("raygun activated");
@@ -145,25 +178,47 @@ class App extends React.Component {
       laserActivated: true
     });
 
-    if (this.state.laserPosition > 500) {
-      this.setState({
-        laserActivated: false
-      });
-    }
 
-    if (this.state.laserPosition === this.state.currentGame.playerTwoPosition) {
-      window.alert("KAPOW");
+
+
+if (this.state.currentGame.playerOne == this.state.currentPlayer) {
+    if (this.state.laserPosition === this.state.currentGame.playerTwoPosition ) {
+      window.alert("KAPOW, "  + this.state.currentGame.playerTwo + " loses");
       this.setState({
         laserActivated: false,
         laserPosition: null
       });
     }
+  }
+
+  else if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
+      if (this.state.laserPosition === this.state.currentGame.playerOnePosition ) {
+        window.alert("KAPOW," + this.state.currentGame.playerOne + " loses");
+        this.setState({
+          laserActivated: false,
+          laserPosition: null
+        });
+      }
+    }
 
 
-    if ( this.state.laserActivated ) {
+if (this.state.currentGame.playerOne === this.state.currentPlayer) {
+    if ( this.state.laserActivated  ) {
       var newPosition = Position + 10;
       setTimeout(function(){this.shootRayGun(newPosition)}.bind(this),40);
     }
+  }
+
+else  if (this.state.currentGame.playerTwo === this.state.currentPlayer) {
+      if ( this.state.laserActivated  ) {
+        var newPosition = Position - 10;
+        setTimeout(function(){this.shootRayGun(newPosition)}.bind(this),40);
+      }
+    }
+
+
+
+
   }
 
   renderLaser() {
@@ -196,9 +251,12 @@ class App extends React.Component {
 
             <p>Player one: {this.state.currentGame.playerOne}</p>
             <p>Player two: {this.state.currentGame.playerTwo}</p>
-            <WormComponent x={this.state.currentGame.playerOnePosition} />
-            <WormComponent x={this.state.currentGame.playerTwoPosition} />
-            <RayGunComponent x={this.state.currentPosition} />
+            <WormComponent x={this.state.currentGame.playerOnePosition} y={this.state.currentGame.playerOneyPosition} />
+            <WormComponent x={this.state.currentGame.playerTwoPosition} y={this.state.currentGame.playerTwoyPosition} />
+
+            <RayGunComponent x={this.state.currentGame.playerOnePosition} />
+            <RayGunComponent x={this.state.currentGame.playerTwoPosition -5} />
+
             {this.renderLaser()}
         </div>}
       </div>
