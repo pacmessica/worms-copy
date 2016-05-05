@@ -39,6 +39,7 @@ class App extends React.Component {
       laserXPosition: null,
       laserYPosition: null,
       laserActivated: false,
+      score: 0
 
     };
 
@@ -177,11 +178,13 @@ class App extends React.Component {
       if (this.state.laserXPosition == this.state.currentGame.playerTwoXPosition &&
           this.state.laserYPosition == this.state.currentGame.playerTwoYPosition
       ) {
-        window.alert("KAPOW, "  + this.state.currentGame.playerTwo + " loses");
+        var newScore = this.state.score + 10;
+        this.games.save(this.state.currentGame, { playerOneScore: newScore });
         this.setState({
           laserActivated: false,
           laserXPosition: null,
-          laserYPosition: null
+          laserYPosition: null,
+          score: newScore
         });
       }
     }
@@ -190,11 +193,14 @@ class App extends React.Component {
       if (this.state.laserXPosition === this.state.currentGame.playerOneXPosition &&
           this.state.laserYPosition === this.state.currentGame.playerOneYPosition
       ) {
-        window.alert("KAPOW," + this.state.currentGame.playerOne + " loses");
+        // window.alert("KAPOW," + this.state.currentGame.playerOne + " loses");
+        var newScore = this.state.score + 10;
+        this.games.save(this.state.currentGame, { playerTwoScore: newScore });
         this.setState({
           laserActivated: false,
           laserXPosition: null,
-          laserYPosition: null
+          laserYPosition: null,
+          score: newScore
         });
       }
     }
@@ -249,13 +255,15 @@ class App extends React.Component {
             { this.state.currentGame !== null && this.state.currentGame.playerOne !== null
               && this.state.currentGame.playerTwo !== null &&
               <div className="game">
-                <p>Player one: {this.state.currentGame.playerOne}</p>
-                <p>Player two: {this.state.currentGame.playerTwo}</p>
                 <WormComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition} />
                 <WormComponent x={this.state.currentGame.playerTwoXPosition} y={this.state.currentGame.playerTwoYPosition} />
                 <RayGunComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition}/>
                 <RayGunComponent x={this.state.currentGame.playerTwoXPosition -5}  y={this.state.currentGame.playerTwoYPosition}/>
                 {this.renderLaser()}
+                <div className="scoreBoard">
+                  <p>{this.state.currentGame.playerOne}: {this.state.currentGame.playerOneScore}</p>
+                  <p>{this.state.currentGame.playerTwo}: {this.state.currentGame.playerTwoScore}</p>
+                </div>
               </div>}
         </div>
       </div>
