@@ -177,13 +177,14 @@ class App extends React.Component {
 
       if (this.state.currentGame.playerOne == this.state.currentPlayer) {
         if (laser.x == this.state.currentGame.playerTwoXPosition &&
-            laser.y == this.state.currentGame.playerTwoYPosition
-        ) {
+            laser.y == this.state.currentGame.playerTwoYPosition) {
+
           var newScore = this.state.score + 10;
           this.games.save(this.state.currentGame, { playerOneScore: newScore });
           this.setState({
             score: newScore
           });
+          return;
         }
       }
 
@@ -197,6 +198,7 @@ class App extends React.Component {
           this.setState({
             score: newScore
           });
+          return
         }
       }
 
