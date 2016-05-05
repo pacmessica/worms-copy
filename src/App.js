@@ -10,6 +10,7 @@ import AppBar from 'material-ui/lib/app-bar';
 import RaisedButton from 'material-ui/lib/raised-button';
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import Theme from './lib/Theme';
+import FlatButton from 'material-ui/lib/flat-button';
 
 const containerStyles = {
   width: "500px",
@@ -219,10 +220,29 @@ class App extends React.Component {
     });
   }
 
+  clearCurrentGame() {
+      this.setState({
+        currentGame: null
+      });
+    }
+
+showNavBar(){
+
+  if (this.state.currentGame!==null){
+    return <AppBar title="LAzer WoRmz" titleStyle={{ textAlign: 'center' }}
+      iconElementLeft={<FlatButton label="Back" onClick={ this.clearCurrentGame.bind(this)} />}
+     />
+  }
+  else{
+  return  <AppBar title="LAzer WoRmz" titleStyle={{ textAlign: 'center' }} />
+  }
+}
+
   render() {
     return (
+
       <div>
-        <AppBar title="LAzer WoRmz" titleStyle={{ textAlign: 'center' }}/>
+        {this.showNavBar()}
         <div style={containerStyles}>
           { this.state.currentPlayer !== null &&
             <p>Hi, {this.state.currentPlayer}</p> }
