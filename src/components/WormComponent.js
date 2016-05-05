@@ -12,12 +12,13 @@ class WormComponent extends React.Component {
       height: "10px",
       backgroundColor: "red",
       left: this.props.x + "px",
-      top: "500px"
+      top: this.props.y + "px"
     };
   }
 
   render() {
-    console.log(" what" + this.props.x)
+    console.log("position x is " + this.props.x)
+    console.log("position y is " + this.props.y)
     return (
       <div style={this.wormStyle()}>
       </div>
