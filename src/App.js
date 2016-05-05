@@ -145,7 +145,6 @@ class App extends React.Component {
   }
 
   jumpWorm(positionDifference) {
-    var oldPosition=this.state.currentYPosition
     var newPosition = this.state.currentYPosition + positionDifference
 
     if (this.state.currentGame.playerOne == this.state.currentPlayer) {
@@ -166,6 +165,22 @@ class App extends React.Component {
     this.setState({
       lasers: this.state.lasers
     });
+
+    if (this.state.currentGame.playerOne == this.state.currentPlayer) {
+      if (this.state.currentGame.playerOneLasers == null) {
+        this.games.save(this.state.currentGame, { playerOneLasers: [] });
+      }
+      this.state.currentGame.playerOneLasers.push({ x: x, y: y,})
+      this.games.save(this.state.currentGame.playerOneLasers)
+    }
+
+    else if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
+      if (this.state.currentGame.playerTwoLasers == null) {
+        this.games.save(this.state.currentGame, { playerTwoLasers: [] });
+      }
+      this.state.currentGame.playerTwoLasers.push({ x: x, y: y,})
+      this.games.save(this.state.currentGame.playerTwoLasers)
+    }
   }
 
   animateLaserBeam() {
@@ -212,10 +227,23 @@ class App extends React.Component {
       newLasers.push(laser)
     }.bind(this))
     this.setState({ lasers: newLasers});
+
+    if (this.state.currentGame.playerOne == this.state.currentPlayer) {
+      this.games.save(this.state.currentGame, { playerOneLasers: newLasers });
+    }
+    else if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
+      this.games.save(this.state.currentGame, { playerTwoLasers: newLasers });
+    }
   }
 
-  renderLasers() {
-    return this.state.lasers.map(function(laser){
+  renderPlayerOneLasers() {
+    return this.state.currentGame.playerOneLasers.map(function(laser){
+      return <LaserComponent x={laser.x} y={laser.y}/>
+    });
+  }
+
+  renderPlayerTwoLasers() {
+    return this.state.currentGame.playerTwoLasers.map(function(laser){
       return <LaserComponent x={laser.x} y={laser.y}/>
     });
   }
@@ -261,7 +289,7 @@ showNavBar(){
               <p>Player one: {this.state.currentGame.playerOne}</p>
               <WormComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition} />
               <RayGunComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition}/>
-              {this.renderLasers()}
+              {this.renderPlayerOneLasers()}
             </div>}
 
             { this.state.currentGame !== null && this.state.currentGame.playerOne !== null
@@ -271,7 +299,8 @@ showNavBar(){
                 <WormComponent x={this.state.currentGame.playerTwoXPosition} y={this.state.currentGame.playerTwoYPosition} />
                 <RayGunComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition}/>
                 <RayGunComponent x={this.state.currentGame.playerTwoXPosition -5}  y={this.state.currentGame.playerTwoYPosition}/>
-                {this.renderLasers()}
+                {this.renderPlayerOneLasers()}
+                {this.renderPlayerTwoLasers()}
                 <div className="scoreBoard">
                   <p>{this.state.currentGame.playerOne}: {this.state.currentGame.playerOneScore}</p>
                   <p>{this.state.currentGame.playerTwo}: {this.state.currentGame.playerTwoScore}</p>
