@@ -17,8 +17,6 @@ class WormComponent extends React.Component {
   }
 
   render() {
-    console.log("position x is " + this.props.x)
-    console.log("position y is " + this.props.y)
     return (
       <div style={this.wormStyle()}>
       </div>

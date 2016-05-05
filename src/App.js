@@ -60,8 +60,9 @@ class App extends React.Component {
         app.onDownArrowKeypress();
       }
     }, false);
-
-    setInterval(this.animateLaserBeam.bind(this), 100)
+    if (this.state.currentGame !== null ) {
+      setInterval(this.animateLaserBeam.bind(this), 100);
+    }
   }
 
   onRightArrowKeypress() {
@@ -165,25 +166,26 @@ class App extends React.Component {
     this.setState({
       lasers: this.state.lasers
     });
+  }
 
-    if (this.state.currentGame.playerOne == this.state.currentPlayer) {
-      if (this.state.currentGame.playerOneLasers == null) {
-        this.games.save(this.state.currentGame, { playerOneLasers: [] });
-      }
-      this.state.currentGame.playerOneLasers.push({ x: x, y: y,})
-      this.games.save(this.state.currentGame.playerOneLasers)
-    }
+  updatePlayerOneScore() {
+    var newScore = this.state.score + 10;
+    this.games.save(this.state.currentGame, { playerOneScore: newScore });
+    this.setState({
+      score: newScore
+    });
+  }
 
-    else if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
-      if (this.state.currentGame.playerTwoLasers == null) {
-        this.games.save(this.state.currentGame, { playerTwoLasers: [] });
-      }
-      this.state.currentGame.playerTwoLasers.push({ x: x, y: y,})
-      this.games.save(this.state.currentGame.playerTwoLasers)
-    }
+  updatePlayerTwoScore() {
+    var newScore = this.state.score + 10;
+    this.games.save(this.state.currentGame, { playerTwoScore: newScore });
+    this.setState({
+      score: newScore
+    });
   }
 
   animateLaserBeam() {
+    console.log("hi");
     let newLasers = []
     this.state.lasers.forEach( function(laser) {
 
@@ -194,12 +196,7 @@ class App extends React.Component {
       if (this.state.currentGame.playerOne == this.state.currentPlayer) {
         if (laser.x == this.state.currentGame.playerTwoXPosition &&
             laser.y == this.state.currentGame.playerTwoYPosition) {
-
-          var newScore = this.state.score + 10;
-          this.games.save(this.state.currentGame, { playerOneScore: newScore });
-          this.setState({
-            score: newScore
-          });
+          updatePlayerOneScore();
           return;
         }
       }
@@ -209,12 +206,8 @@ class App extends React.Component {
             laser.y === this.state.currentGame.playerOneYPosition
         ) {
           // window.alert("KAPOW," + this.state.currentGame.playerOne + " loses");
-          var newScore = this.state.score + 10;
-          this.games.save(this.state.currentGame, { playerTwoScore: newScore });
-          this.setState({
-            score: newScore
-          });
-          return
+          updatePlayerTwoScore();
+          return;
         }
       }
 
@@ -237,13 +230,23 @@ class App extends React.Component {
   }
 
   renderPlayerOneLasers() {
-    return this.state.currentGame.playerOneLasers.map(function(laser){
-      return <LaserComponent x={laser.x} y={laser.y}/>
-    });
+    if (this.state.currentGame.playerOneLasers !== undefined) {
+      return this.state.currentGame.playerOneLasers.map(function(laser){
+        return <LaserComponent x={laser.x} y={laser.y}/>
+      });
+    }
   }
 
   renderPlayerTwoLasers() {
-    return this.state.currentGame.playerTwoLasers.map(function(laser){
+    if (this.state.currentGame.playerTwoLasers !== undefined) {
+      return this.state.currentGame.playerTwoLasers.map(function(laser){
+        return <LaserComponent x={laser.x} y={laser.y}/>
+      });
+    }
+  }
+
+  renderLasers() {
+    return this.state.lasers.map(function(laser){
       return <LaserComponent x={laser.x} y={laser.y}/>
     });
   }
@@ -290,6 +293,7 @@ showNavBar(){
               <WormComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition} />
               <RayGunComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition}/>
               {this.renderPlayerOneLasers()}
+              {this.renderLasers()}
             </div>}
 
             { this.state.currentGame !== null && this.state.currentGame.playerOne !== null
@@ -299,8 +303,10 @@ showNavBar(){
                 <WormComponent x={this.state.currentGame.playerTwoXPosition} y={this.state.currentGame.playerTwoYPosition} />
                 <RayGunComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition}/>
                 <RayGunComponent x={this.state.currentGame.playerTwoXPosition -5}  y={this.state.currentGame.playerTwoYPosition}/>
+
                 {this.renderPlayerOneLasers()}
                 {this.renderPlayerTwoLasers()}
+
                 <div className="scoreBoard">
                   <p>{this.state.currentGame.playerOne}: {this.state.currentGame.playerOneScore}</p>
                   <p>{this.state.currentGame.playerTwo}: {this.state.currentGame.playerTwoScore}</p>
