@@ -227,16 +227,15 @@ class App extends React.Component {
     }
 
 showNavBar(){
-
   if (this.state.currentGame!==null){
     return <AppBar title="LAzer WoRmz" titleStyle={{ textAlign: 'center' }}
       iconElementLeft={<FlatButton label="Back" onClick={ this.clearCurrentGame.bind(this)} />}
      />
   }
   else{
-  return  <AppBar title="LAzer WoRmz" titleStyle={{ textAlign: 'center' }} />
+    return  <AppBar title="LAzer WoRmz" titleStyle={{ textAlign: 'center' }} />
+    }
   }
-}
 
   render() {
     return (
