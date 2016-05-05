@@ -12,7 +12,7 @@ class RayGunComponent extends React.Component {
       height: "5px",
       backgroundColor: "black",
       left: this.props.x + 5 + "px",
-      top: "500px"
+      top: this.props.y + "px"
     };
   }
 
