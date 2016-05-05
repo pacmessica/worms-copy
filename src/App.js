@@ -50,10 +50,13 @@ class App extends React.Component {
         app.onRightArrowKeypress();
       }
       else if(keyCode===32){
-        app.onShiftKeypress();
+        app.onSpaceKeypress();
       }
-      else if(keyCode===17){
-        app.onCtrlKeypress();
+      else if(keyCode===38){
+        app.onUpArrowKeypress();
+      }
+      else if(keyCode===40){
+        app.onDownArrowKeypress();
       }
     }, false);
   }
@@ -66,12 +69,16 @@ class App extends React.Component {
     this.moveWorm(-10);
   }
 
-  onShiftKeypress(){
+  onSpaceKeypress(){
     this.shootRayGun(this.state.currentPosition);
   }
 
-  onCtrlKeypress(){
+  onUpArrowKeypress(){
     this.jumpWorm(-10)
+  }
+
+  onDownArrowKeypress(){
+    this.jumpWorm(10)
   }
 
   updateList() {
