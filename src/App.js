@@ -221,18 +221,26 @@ class App extends React.Component {
           { this.state.currentGame === null &&
             <NewGameComponent onCreate={this.createGame.bind(this)}/> }
 
-          { this.state.currentGame !== null &&
+          { this.state.currentGame !== null && this.state.currentGame.playerOne == this.state.currentPlayer
+            && this.state.currentGame.playerTwo == null &&
             <div className="game">
-
               <p>Player one: {this.state.currentGame.playerOne}</p>
-              <p>Player two: {this.state.currentGame.playerTwo}</p>
               <WormComponent x={this.state.currentGame.playerOnePosition} y={this.state.currentGame.playerOneyPosition} />
-              <WormComponent x={this.state.currentGame.playerTwoPosition} y={this.state.currentGame.playerTwoyPosition} />
               <RayGunComponent x={this.state.currentGame.playerOnePosition} />
-              <RayGunComponent x={this.state.currentGame.playerTwoPosition -5} />
-
               {this.renderLaser()}
             </div>}
+
+            { this.state.currentGame !== null && this.state.currentGame.playerOne !== null
+              && this.state.currentGame.playerTwo !== null &&
+              <div className="game">
+                <p>Player one: {this.state.currentGame.playerOne}</p>
+                <p>Player two: {this.state.currentGame.playerTwo}</p>
+                <WormComponent x={this.state.currentGame.playerOnePosition} y={this.state.currentGame.playerOneyPosition} />
+                <WormComponent x={this.state.currentGame.playerTwoPosition} y={this.state.currentGame.playerTwoyPosition} />
+                <RayGunComponent x={this.state.currentGame.playerOnePosition} />
+                <RayGunComponent x={this.state.currentGame.playerTwoPosition -5} />
+                {this.renderLaser()}
+              </div>}
         </div>
       </div>
     );
