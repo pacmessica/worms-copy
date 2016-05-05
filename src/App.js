@@ -36,10 +36,8 @@ class App extends React.Component {
       currentPlayer: null,
       currentXPosition: 100,
       currentYPosition: 500,
-      laserXPosition: null,
-      laserYPosition: null,
-      laserActivated: false,
-
+      score: 0,
+      lasers: []
     };
 
     let app = this;
@@ -61,6 +59,8 @@ class App extends React.Component {
         app.onDownArrowKeypress();
       }
     }, false);
+
+    setInterval(this.animateLaserBeam.bind(this), 100)
   }
 
   onRightArrowKeypress() {
@@ -160,64 +160,63 @@ class App extends React.Component {
 
   }
 
-  shootRayGun(x, y) {
+  shootRayGun(x,y){
+    this.state.lasers.push({ x: x, y: y,})
     this.setState({
-      laserXPosition: x,
-      laserYPosition: y,
-      laserActivated: true
+      lasers: this.state.lasers
     });
-
-    if (this.state.laserXPosition > 800 || this.state.laserXPosition < 0 ) {
-      this.setState({
-        laserActivated: false
-      });
-    }
-
-    if (this.state.currentGame.playerOne == this.state.currentPlayer) {
-      if (this.state.laserXPosition == this.state.currentGame.playerTwoXPosition &&
-          this.state.laserYPosition == this.state.currentGame.playerTwoYPosition
-      ) {
-        window.alert("KAPOW, "  + this.state.currentGame.playerTwo + " loses");
-        this.setState({
-          laserActivated: false,
-          laserXPosition: null,
-          laserYPosition: null
-        });
-      }
-    }
-
-    else if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
-      if (this.state.laserXPosition === this.state.currentGame.playerOneXPosition &&
-          this.state.laserYPosition === this.state.currentGame.playerOneYPosition
-      ) {
-        window.alert("KAPOW," + this.state.currentGame.playerOne + " loses");
-        this.setState({
-          laserActivated: false,
-          laserXPosition: null,
-          laserYPosition: null
-        });
-      }
-    }
-
-    if (this.state.currentGame.playerOne == this.state.currentPlayer) {
-      if ( this.state.laserActivated  ) {
-        var newXPosition = x + 10;
-        setTimeout(function(){this.shootRayGun(newXPosition, y)}.bind(this),40);
-      }
-    }
-
-    else  if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
-      if ( this.state.laserActivated  ) {
-        var newXPosition = x - 10;
-        setTimeout(function(){this.shootRayGun(newXPosition, y)}.bind(this),40);
-      }
-    }
   }
 
-  renderLaser() {
-    if(this.state.laserActivated){
-      return <LaserComponent x={this.state.laserXPosition} y={this.state.laserYPosition}/>
-    }
+  animateLaserBeam() {
+    let newLasers = []
+    this.state.lasers.forEach( function(laser) {
+
+      if (laser.x > 800 || laser.y < 0 ) {
+        return;
+      }
+
+      if (this.state.currentGame.playerOne == this.state.currentPlayer) {
+        if (laser.x == this.state.currentGame.playerTwoXPosition &&
+            laser.y == this.state.currentGame.playerTwoYPosition) {
+
+          var newScore = this.state.score + 10;
+          this.games.save(this.state.currentGame, { playerOneScore: newScore });
+          this.setState({
+            score: newScore
+          });
+          return;
+        }
+      }
+
+      else if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
+        if (laser.x === this.state.currentGame.playerOneXPosition &&
+            laser.y === this.state.currentGame.playerOneYPosition
+        ) {
+          // window.alert("KAPOW," + this.state.currentGame.playerOne + " loses");
+          var newScore = this.state.score + 10;
+          this.games.save(this.state.currentGame, { playerTwoScore: newScore });
+          this.setState({
+            score: newScore
+          });
+          return
+        }
+      }
+
+      if (this.state.currentGame.playerOne == this.state.currentPlayer) {
+        laser.x += 10;
+      }
+      else if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
+        laser.x -= 10;
+      }
+      newLasers.push(laser)
+    }.bind(this))
+    this.setState({ lasers: newLasers});
+  }
+
+  renderLasers() {
+    return this.state.lasers.map(function(laser){
+      return <LaserComponent x={laser.x} y={laser.y}/>
+    });
   }
 
   render() {
@@ -243,19 +242,21 @@ class App extends React.Component {
               <p>Player one: {this.state.currentGame.playerOne}</p>
               <WormComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition} />
               <RayGunComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition}/>
-              {this.renderLaser()}
+              {this.renderLasers()}
             </div>}
 
             { this.state.currentGame !== null && this.state.currentGame.playerOne !== null
               && this.state.currentGame.playerTwo !== null &&
               <div className="game">
-                <p>Player one: {this.state.currentGame.playerOne}</p>
-                <p>Player two: {this.state.currentGame.playerTwo}</p>
                 <WormComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition} />
                 <WormComponent x={this.state.currentGame.playerTwoXPosition} y={this.state.currentGame.playerTwoYPosition} />
                 <RayGunComponent x={this.state.currentGame.playerOneXPosition} y={this.state.currentGame.playerOneYPosition}/>
                 <RayGunComponent x={this.state.currentGame.playerTwoXPosition -5}  y={this.state.currentGame.playerTwoYPosition}/>
-                {this.renderLaser()}
+                {this.renderLasers()}
+                <div className="scoreBoard">
+                  <p>{this.state.currentGame.playerOne}: {this.state.currentGame.playerOneScore}</p>
+                  <p>{this.state.currentGame.playerTwo}: {this.state.currentGame.playerTwoScore}</p>
+                </div>
               </div>}
         </div>
       </div>
