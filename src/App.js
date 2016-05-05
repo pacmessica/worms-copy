@@ -165,12 +165,6 @@ class App extends React.Component {
 
   }
 
-
-
-
-
-
-
   shootRayGun(Position) {
     console.log("raygun activated");
     this.setState({
@@ -178,20 +172,17 @@ class App extends React.Component {
       laserActivated: true
     });
 
-
-
-
-if (this.state.currentGame.playerOne == this.state.currentPlayer) {
-    if (this.state.laserPosition === this.state.currentGame.playerTwoPosition ) {
-      window.alert("KAPOW, "  + this.state.currentGame.playerTwo + " loses");
-      this.setState({
-        laserActivated: false,
-        laserPosition: null
-      });
+    if (this.state.currentGame.playerOne == this.state.currentPlayer) {
+      if (this.state.laserPosition === this.state.currentGame.playerTwoPosition ) {
+        window.alert("KAPOW, "  + this.state.currentGame.playerTwo + " loses");
+        this.setState({
+          laserActivated: false,
+          laserPosition: null
+        });
+      }
     }
-  }
 
-  else if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
+    else if (this.state.currentGame.playerTwo == this.state.currentPlayer) {
       if (this.state.laserPosition === this.state.currentGame.playerOnePosition ) {
         window.alert("KAPOW," + this.state.currentGame.playerOne + " loses");
         this.setState({
@@ -201,24 +192,19 @@ if (this.state.currentGame.playerOne == this.state.currentPlayer) {
       }
     }
 
-
-if (this.state.currentGame.playerOne === this.state.currentPlayer) {
-    if ( this.state.laserActivated  ) {
-      var newPosition = Position + 10;
-      setTimeout(function(){this.shootRayGun(newPosition)}.bind(this),40);
+    if (this.state.currentGame.playerOne === this.state.currentPlayer) {
+      if ( this.state.laserActivated  ) {
+        var newPosition = Position + 10;
+        setTimeout(function(){this.shootRayGun(newPosition)}.bind(this),40);
+      }
     }
-  }
 
-else  if (this.state.currentGame.playerTwo === this.state.currentPlayer) {
+    else  if (this.state.currentGame.playerTwo === this.state.currentPlayer) {
       if ( this.state.laserActivated  ) {
         var newPosition = Position - 10;
         setTimeout(function(){this.shootRayGun(newPosition)}.bind(this),40);
       }
     }
-
-
-
-
   }
 
   renderLaser() {
@@ -262,7 +248,7 @@ else  if (this.state.currentGame.playerTwo === this.state.currentPlayer) {
             {this.renderLaser()}
         </div>}
       </div>
-    </div>  
+    </div>
     );
   }
 }
